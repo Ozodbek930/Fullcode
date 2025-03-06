@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  
+}
+
+.A{
+background-color: black;
+}
+
+.ddd{
+margin: 0 auto;
+gap: 50px;
+display: flex;
+}
+
+.ssd{
+margin: 0 auto;
+
+}
+
+.S{
+margin: 0 auto;
+}
