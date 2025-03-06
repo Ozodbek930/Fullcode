@@ -20,13 +20,12 @@ interface CategoryType {
   Img3: string;
 }
 
+
 function Categories() {
-  // Autentifikatsiya uchun state'lar
+  const supabase =  createClient()
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [passwordInput, setPasswordInput] = useState<string>("");
-
-  // Ma'lumotlar va formalarni boshqarish
-  const supabase =  createClient()
+  
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
@@ -39,11 +38,11 @@ function Categories() {
   const [imgs, setimgs] = useState("");
   const [imgs2, setimgs2] = useState("");
   const [imgs3, setimgs3] = useState("");
-
+  
   useEffect(() => {
     fetchCategory();
   }, []);
-
+  
   const fetchCategory = async () => {
     try {
       setLoading(true);
@@ -57,7 +56,7 @@ function Categories() {
       setLoading(false);
     }
   };
-
+  
   const handleUpdate = (category: CategoryType) => {
     setCurrent(category.id);
     setCategoryName(category.name || "");
@@ -69,13 +68,13 @@ function Categories() {
     setActiveCategory(category.active);
     setOpenRodal(true);
   };
-
+  
   const handleDelete = async (id: number) => {
     try {
       const { error } = await supabase
-        .from("Shop_Category")
-        .delete()
-        .eq("id", id);
+      .from("Shop_Category")
+      .delete()
+      .eq("id", id);
       if (error) throw error;
       toast.success("Kategoriya muvaffaqiyatli o‘chirildi!");
       await fetchCategory();
@@ -84,7 +83,7 @@ function Categories() {
       console.error(error);
     }
   };
-
+  
   const handleAddCategory = async () => {
     if (
       categoryName.trim() === "" ||
@@ -99,21 +98,21 @@ function Categories() {
       );
       return;
     }
-
+    
     try {
       if (current !== null) {
         const { error } = await supabase
-          .from("Shop_Category")
-          .update({
-            name: categoryName,
-            desc: categoryDescription,
-            Img: imgs,
-            Img2: imgs2,
-            Img3: imgs3,
-            price: categoryPrice,
-            active: activeCategory,
-          })
-          .eq("id", current);
+        .from("Shop_Category")
+        .update({
+          name: categoryName,
+          desc: categoryDescription,
+          Img: imgs,
+          Img2: imgs2,
+          Img3: imgs3,
+          price: categoryPrice,
+          active: activeCategory,
+        })
+        .eq("id", current);
         if (error) throw error;
         toast.success("Kategoriya muvaffaqiyatli yangilandi!");
       } else {
@@ -140,7 +139,7 @@ function Categories() {
       console.error(error);
     }
   };
-
+  
   const resetForm = () => {
     setCurrent(null);
     setCategoryName("");
@@ -149,7 +148,7 @@ function Categories() {
     setCategoryPrice(0);
     setActiveCategory(false);
   };
-
+  
   // Parolni tekshirish funksiyasi
   const handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -170,7 +169,7 @@ function Categories() {
         <form
           onSubmit={handlePasswordSubmit}
           className="d-flex flex-column align-items-center"
-        >
+          >
           <input
             type="password"
             value={passwordInput}
