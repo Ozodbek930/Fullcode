@@ -5,6 +5,7 @@ import { supabase } from "@/supabaseClient";
 import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { createClient } from "@/supabase/client";
 
 interface CategoryType {
   id: number;
@@ -17,6 +18,7 @@ interface CategoryType {
 }
 
 export default function HomePage() {
+  const supabase =  createClient()
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);

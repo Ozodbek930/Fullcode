@@ -3,8 +3,10 @@
 import { useState } from "react";
 import { supabase } from "@/supabaseClient";
 import { useRouter } from "next/navigation";
+import { createClient } from "@/supabase/client";
 
 const Login = () => {
+  const supabase =  createClient()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");

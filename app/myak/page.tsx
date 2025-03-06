@@ -6,6 +6,7 @@ import { MdOutlineAccountCircle } from "react-icons/md";
 import { FaFacebookSquare, FaShoppingCart, FaTwitterSquare, FaUser } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { CiInstagram } from "react-icons/ci";
+import { createClient } from "@/supabase/client";
 
 interface CategoryType {
   id: number;
@@ -54,6 +55,7 @@ const Myak = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    const supabase =  createClient()
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 

@@ -6,6 +6,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { FaFacebookSquare, FaShoppingCart, FaTwitterSquare, FaUser } from "react-icons/fa";
 import { CiInstagram } from "react-icons/ci";
+import { createClient } from "@/supabase/client";
 
 interface ProductType {
   id: number;
@@ -19,6 +20,7 @@ interface ProductType {
 }
 
 export default function ProductDetails() {
+  const supabase =  createClient()
   const params = useParams();
   const router = useRouter();
   const productId = params.id as string;

@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { createClient } from "@/supabase/client";
 
 
 interface OrderType {
@@ -18,6 +19,7 @@ interface OrderType {
 }
 
 export default function OrdersPage() {
+  const supabase =  createClient()
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();

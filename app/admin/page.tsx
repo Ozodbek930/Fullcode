@@ -5,9 +5,9 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Skeleton from "react-loading-skeleton";
-import { supabase } from "@/supabaseClient";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../Sidebar";
+import { createClient } from "@/supabase/client";
 
 interface CategoryType {
   id: number;
@@ -26,6 +26,7 @@ function Categories() {
   const [passwordInput, setPasswordInput] = useState<string>("");
 
   // Ma'lumotlar va formalarni boshqarish
+  const supabase =  createClient()
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; 
 import { supabase } from "@/supabaseClient"; 
 import "bootstrap/dist/css/bootstrap.min.css";
+import { createClient } from "@/supabase/client";
 
 type ColumnId = "new" | "inProgress" | "completed";
 
@@ -24,6 +25,7 @@ export default function OrdersPage() {
 
   // Buyurtmalar, yuklanish holati va boshqalar
   const [loading, setLoading] = useState<boolean>(true);
+  const supabase =  createClient()
   const [orders, setOrders] = useState<{ [key in ColumnId]: OrderType[] }>({
     new: [],
     inProgress: [],

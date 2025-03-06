@@ -2,11 +2,12 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/supabaseClient";
 import Sidebar from "../Sidebar";
+import { createClient } from "@/supabase/client";
 
 export default function Dashboard() {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [passwordInput, setPasswordInput] = useState<string>("");
-
+  const supabase =  createClient()
   const [categoryCount, setCategoryCount] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
   const [loading, setLoading] = useState(true);
