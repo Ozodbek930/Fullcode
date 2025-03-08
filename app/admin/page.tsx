@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Rodal from "rodal";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
@@ -8,7 +8,7 @@ import Skeleton from "react-loading-skeleton";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Sidebar from "../Sidebar";
 import { createClient } from "@/supabase/client";
-
+import Image from 'next/image'; // Import Image from next/image
 interface CategoryType {
   id: number;
   name: string;
@@ -19,13 +19,10 @@ interface CategoryType {
   Img2: string;
   Img3: string;
 }
-
-
 function Categories() {
-  const supabase =  createClient()
+  const supabase = createClient();
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [passwordInput, setPasswordInput] = useState<string>("");
-  
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [categoryName, setCategoryName] = useState("");
   const [categoryDescription, setCategoryDescription] = useState("");
@@ -34,16 +31,11 @@ function Categories() {
   const [current, setCurrent] = useState<number | null>(null);
   const [openRodal, setOpenRodal] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [categoryType, setCategoryType] = useState("");
+  const [categoryType, setCategoryType] = useState(""); // If not needed, consider removing it
   const [imgs, setimgs] = useState("");
   const [imgs2, setimgs2] = useState("");
   const [imgs3, setimgs3] = useState("");
-  
-  useEffect(() => {
-    fetchCategory();
-  }, []);
-  
-  const fetchCategory = async () => {
+  const fetchCategory = useCallback(async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase.from("Shop_Category").select("*");
@@ -55,8 +47,10 @@ function Categories() {
     } finally {
       setLoading(false);
     }
-  };
-  
+  }, [supabase]);
+  useEffect(() => {
+    fetchCategory();
+  }, [fetchCategory]);
   const handleUpdate = (category: CategoryType) => {
     setCurrent(category.id);
     setCategoryName(category.name || "");
@@ -68,13 +62,12 @@ function Categories() {
     setActiveCategory(category.active);
     setOpenRodal(true);
   };
-  
   const handleDelete = async (id: number) => {
     try {
       const { error } = await supabase
-      .from("Shop_Category")
-      .delete()
-      .eq("id", id);
+        .from("Shop_Category")
+        .delete()
+        .eq("id", id);
       if (error) throw error;
       toast.success("Kategoriya muvaffaqiyatli o‘chirildi!");
       await fetchCategory();
@@ -83,7 +76,6 @@ function Categories() {
       console.error(error);
     }
   };
-  
   const handleAddCategory = async () => {
     if (
       categoryName.trim() === "" ||
@@ -93,26 +85,23 @@ function Categories() {
       imgs3.trim() === "" ||
       categoryPrice <= 0
     ) {
-      toast.warn(
-        "Iltimos, barcha maydonlarni to‘ldiring va narxni to‘g‘ri kiriting!"
-      );
+      toast.warn("Iltimos, barcha maydonlarni to‘ldiring va narxni to‘g‘ri kiriting!");
       return;
     }
-    
     try {
       if (current !== null) {
         const { error } = await supabase
-        .from("Shop_Category")
-        .update({
-          name: categoryName,
-          desc: categoryDescription,
-          Img: imgs,
-          Img2: imgs2,
-          Img3: imgs3,
-          price: categoryPrice,
-          active: activeCategory,
-        })
-        .eq("id", current);
+          .from("Shop_Category")
+          .update({
+            name: categoryName,
+            desc: categoryDescription,
+            Img: imgs,
+            Img2: imgs2,
+            Img3: imgs3,
+            price: categoryPrice,
+            active: activeCategory,
+          })
+          .eq("id", current);
         if (error) throw error;
         toast.success("Kategoriya muvaffaqiyatli yangilandi!");
       } else {
@@ -139,7 +128,6 @@ function Categories() {
       console.error(error);
     }
   };
-  
   const resetForm = () => {
     setCurrent(null);
     setCategoryName("");
@@ -148,7 +136,6 @@ function Categories() {
     setCategoryPrice(0);
     setActiveCategory(false);
   };
-  
   const handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (passwordInput === "OzodbekTOP") {
@@ -157,7 +144,6 @@ function Categories() {
       alert("Parol noto'g'ri!");
     }
   };
-
   if (!authenticated) {
     return (
       <div className="container py-4">
@@ -167,7 +153,7 @@ function Categories() {
         <form
           onSubmit={handlePasswordSubmit}
           className="d-flex flex-column align-items-center"
-          >
+        >
           <input
             type="password"
             value={passwordInput}
@@ -182,7 +168,6 @@ function Categories() {
       </div>
     );
   }
-
   return (
     <div className="d-flex">
       <Sidebar />
@@ -200,7 +185,6 @@ function Categories() {
             + Add New
           </button>
         </div>
-
         <div className="table-responsive">
           <table className="table table-striped table-hover">
             <thead className="table-dark">
@@ -213,7 +197,6 @@ function Categories() {
                 <th>Actions</th>
               </tr>
             </thead>
-
             <tbody>
               {loading
                 ? Array.from({ length: 5 }).map((_, index) => (
@@ -240,7 +223,7 @@ function Categories() {
                       <td>{index + 1}</td>
                       <td>
                         {category.Img && (
-                          <img
+                          <Image
                             src={category.Img}
                             alt={category.name}
                             width={50}
@@ -266,8 +249,7 @@ function Categories() {
                         >
                           <MdEdit />
                         </button>
-                        <button
-                          //@ts-ignore
+git add .
                           onClick={() => handleDelete(category.id)}
                           className="btn btn-danger btn-sm"
                         >
@@ -280,7 +262,6 @@ function Categories() {
           </table>
         </div>
       </div>
-
       {/* Modal */}
       <Rodal height={350} visible={openRodal} onClose={() => setOpenRodal(false)}>
         <div className="p-3">
@@ -355,5 +336,4 @@ function Categories() {
     </div>
   );
 }
-
 export default Categories;
