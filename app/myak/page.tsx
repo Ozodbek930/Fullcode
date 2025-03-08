@@ -1,25 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/supabaseClient";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { FaFacebookSquare, FaShoppingCart, FaTwitterSquare, FaUser } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { CiInstagram } from "react-icons/ci";
-import { createClient } from "@/supabase/client";
-
-interface CategoryType {
-  id: number;
-  name: string;
-  desc: string;
-  image: string;
-  price: number;
-  active: boolean;
-  Img: string;
-}
+import Image from "next/image";
 
 const Myak = () => {
-  const [cartItems, setCartItems] = useState(0);
+  const [cartItems] = useState(0);
   const router = useRouter();
 
   const addBillingAddress = async (data: {
@@ -55,7 +45,6 @@ const Myak = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    const supabase =  createClient()
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
@@ -79,11 +68,8 @@ const Myak = () => {
       <nav className="bg-white shadow p-4 flex justify-between items-center">
         <h1 className="text-green-600 text-2xl font-bold">GREENSHOP</h1>
         <div className="flex gap-4">
-          <button>
-            <MdOutlineAccountCircle
-              onClick={() => router.push("/myak")}
-              className="text-gray-600 cursor-pointer"
-            />
+          <button onClick={() => router.push("/myak")}>
+            <MdOutlineAccountCircle className="text-gray-600 cursor-pointer" />
           </button>
           <button onClick={() => router.push("/orders")} className="relative">
             <FaShoppingCart className="text-gray-600 cursor-pointer" />
@@ -189,35 +175,24 @@ const Myak = () => {
           {/* Upper Section */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
-              <img src="/Group 18.png" alt="Garden Care" className="mx-auto" />
+              <Image src="/Group 18.png" alt="Garden Care" className="mx-auto" width={200} height={200} />
               <h3 className="font-bold mt-2">Garden Care</h3>
               <p>
-                We are an online plant shop offering a wide range of cheap and
-                trendy plants.
+                We are an online plant shop offering a wide range of cheap and trendy plants.
               </p>
             </div>
             <div className="text-center">
-              <img
-                src="/Group 18.png"
-                alt="Plant Renovation"
-                className="mx-auto"
-              />
+              <Image src="/Group 18.png" alt="Plant Renovation" className="mx-auto" width={200} height={200} />
               <h3 className="font-bold mt-2">Plant Renovation</h3>
               <p>
-                We are an online plant shop offering a wide range of cheap and
-                trendy plants.
+                We are an online plant shop offering a wide range of cheap and trendy plants.
               </p>
             </div>
             <div className="text-center">
-              <img
-                src="/Group 19.png"
-                alt="Watering Garden"
-                className="mx-auto"
-              />
+              <Image src="/Group 19.png" alt="Watering Garden" className="mx-auto" width={200} height={200} />
               <h3 className="font-bold mt-2">Watering Garden</h3>
               <p>
-                We are an online plant shop offering a wide range of cheap and
-                trendy plants.
+                We are an online plant shop offering a wide range of cheap and trendy plants.
               </p>
             </div>
             <div className="text-center">
@@ -233,8 +208,7 @@ const Myak = () => {
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-2">
-                We usually post offers and challenges in the newsletter. We
-                offer a wide range of houseplants and accessories.
+                We usually post offers and challenges in the newsletter. We offer a wide range of houseplants and accessories.
               </p>
             </div>
           </div>
@@ -242,7 +216,7 @@ const Myak = () => {
           {/* Middle Section */}
           <div className="bg-green-100 mt-6 p-4 flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center gap-2">
-              <img src="/Group.png" alt="GreenShop" className="w-100 h-10" />
+              <Image src="/Group.png" alt="GreenShop" className="w-full h-auto" width={100} height={40} />
               {/* <span className="font-bold text-green-600 text-lg">GREENSHOP</span> */}
             </div>
             <p>70 West Buckingham Ave. Farmingdale, NY 11735</p>
@@ -291,11 +265,7 @@ const Myak = () => {
               </div>
               <h4 className="font-bold mt-4">We accept</h4>
               <div className="flex gap-2 mt-2">
-                <img
-                  src="/image 16.png"
-                  alt="American Express"
-                  className="w-100"
-                />
+                <Image src="/image 16.png" alt="American Express" className="w-full h-auto" width={100} height={60} />
               </div>
             </div>
           </div>
@@ -306,8 +276,6 @@ const Myak = () => {
         </div>
       </footer>
     </div>
-  
-
   );
 };
 

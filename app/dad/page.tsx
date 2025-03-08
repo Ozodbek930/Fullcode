@@ -19,11 +19,9 @@ interface OrderType {
 }
 
 export default function OrdersPage() {
-  // Autentifikatsiya uchun state'lar
   const [authenticated, setAuthenticated] = useState<boolean>(false);
   const [passwordInput, setPasswordInput] = useState<string>("");
 
-  // Buyurtmalar, yuklanish holati va boshqalar
   const [loading, setLoading] = useState<boolean>(true);
   const supabase =  createClient()
   const [orders, setOrders] = useState<{ [key in ColumnId]: OrderType[] }>({
@@ -33,7 +31,6 @@ export default function OrdersPage() {
   });
   const router = useRouter();
 
-  // Faqat autentifikatsiya o‘tgach buyurtmalarni yuklaymiz
   useEffect(() => {
     if (authenticated) {
       fetchOrders();

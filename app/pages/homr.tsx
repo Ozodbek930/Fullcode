@@ -1,5 +1,3 @@
-// pages/homr.tsx
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { supabase } from "@/supabaseClient";
@@ -48,7 +46,6 @@ export default function Homr() {
     setModalVisible(true);
   };
 
-  // Mahsulotga bosilganda tafsilot sahifasiga yo'naltirish
   const handleProductClick = (category: CategoryType) => {
     router.push(`/product/${category.id}`);
   };
@@ -108,7 +105,6 @@ export default function Homr() {
         </div>
       )}
 
-      {/* Rodal modal oynasi */}
       <Rodal visible={modalVisible} onClose={() => setModalVisible(false)}>
         {selectedProduct && (
           <div className="text-center">

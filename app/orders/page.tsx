@@ -1,12 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
-import { supabase } from "@/supabaseClient";
+import { useMemo, useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import { FaShoppingCart, FaUser } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { createClient } from "@/supabase/client";
-
+import Image from "next/image";
 
 interface OrderType {
   id: number;
@@ -19,18 +20,13 @@ interface OrderType {
 }
 
 export default function OrdersPage() {
-  const supabase =  createClient()
+  const supabase = useMemo(() => createClient(), []);
   const [orders, setOrders] = useState<OrderType[]>([]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const [cartItems, setCartItems] = useState(0);
+  const [cartItems] = useState(0);
 
-
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     setLoading(true);
     const { data, error } = await supabase
       .from("Orders")
@@ -43,64 +39,91 @@ export default function OrdersPage() {
       setOrders(data || []);
     }
     setLoading(false);
-  };
+  }, [supabase]);
+
+  useEffect(() => {
+    fetchOrders();
+  }, [fetchOrders]);
 
   const deleteOrder = async (orderId: number) => {
     const { error } = await supabase.from("Orders").delete().eq("id", orderId);
 
     if (error) {
-      console.error("Buyurtmani o‘chirishda xatolik:", error.message);
+      console.error("Buyurtmani o&apos;chirishda xatolik:", error.message);
     } else {
-      alert("Buyurtma o‘chirildi!");
-      fetchOrders(); 
+      fetchOrders();
     }
   };
 
   return (
-    <div className="d-flex ">
+    <div className="d-flex">
       <div className="container py-4">
-        {/* -------------------------------- */}
         <nav className="bg-white shadow p-4 flex justify-between items-center">
-        <h1 className="text-green-600 text-2xl font-bold">GREENSHOP</h1>
-        <button 
-          className="btn btn-primary" 
-          onClick={() => router.push("/")}
-        >
-          Bosh sahifaga o'tish
-        </button>
-        <div className="flex gap-4">
-          <button>
-            <MdOutlineAccountCircle onClick={() => router.push("/login")}  className="text-gray-600 cursor-pointer" />
+          <h1 className="text-green-600 text-2xl font-bold">GREENSHOP</h1>
+          <button className="btn btn-primary" onClick={() => router.push("/")}>
+            Bosh sahifaga o&apos;tish
           </button>
-          <button onClick={() => router.push("/orders")} className="relative">
-            <FaShoppingCart className="text-gray-600 cursor-pointer" />
-            {cartItems > 0 && (
-              <span className="absolute top-0 right-0 bg-red-500 text-white text-xs px-1 rounded-full">
-                {cartItems}
-              </span>
-            )}
-          </button>
-          <button
-            onClick={() => router.push("/login")}
-            className="bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2"
-          >
-            <FaUser />
-            Login
-          </button>
-        </div>
-      </nav>
-
+          <div className="flex gap-4">
+            <button>
+              <MdOutlineAccountCircle
+                onClick={() => router.push("/login")}
+                className="text-gray-600 cursor-pointer"
+              />
+            </button>
+            <button onClick={() => router.push("/orders")} className="relative">
+              <FaShoppingCart className="text-gray-600 cursor-pointer" />
+              {cartItems > 0 && (
+                <span className="absolute top-0 right-0 bg-red-500 text-white text-xs px-1 rounded-full">
+                  {cartItems}
+                </span>
+              )}
+            </button>
+            <button
+              onClick={() => router.push("/login")}
+              className="bg-green-600 text-white px-4 py-2 rounded flex items-center gap-2"
+            >
+              <FaUser />
+              Login
+            </button>
+          </div>
+        </nav>
 
         {loading ? (
-          <p className="text-center">Yuklanmoqda...</p>
+          <div className="order-list d-flex flex-wrap gap-4 mt-4">
+            {[...Array(4)].map((_, index) => (
+              <div
+                key={index}
+                className="order-item border p-3 shadow-lg rounded bg-white"
+                style={{ maxWidth: "350px" }}
+              >
+                <h5>
+                  <Skeleton width={200} height={20} />
+                </h5>
+                <p>
+                  <Skeleton count={2} />
+                </p>
+                <p className="fw-bold">
+                  <Skeleton width={100} height={20} />
+                </p>
+                <p>
+                  <Skeleton width={50} height={20} />
+                </p>
+                <p>
+                  <Skeleton width={150} height={20} />
+                </p>
+                <Skeleton width="100%" height={180} />
+                <Skeleton width="100%" height={40} />
+              </div>
+            ))}
+          </div>
         ) : orders.length === 0 ? (
-          <p className="text-center">Hozircha hech qanday buyurtma yo'q</p>
+          <p className="text-center">Hozircha hech qanday buyurtma yo&apos;q</p>
         ) : (
           <div className="order-list d-flex flex-wrap gap-4 mt-4">
             {orders.map((order, index) => (
               <div
                 key={order.id}
-                className="order-item border p-3 shadow-lg rounded position-relative bg-white"
+                className="order-item border p-3 shadow-lg rounded bg-white"
                 style={{
                   maxWidth: "350px",
                   transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -119,11 +142,13 @@ export default function OrdersPage() {
                   Jami: ${order.price * order.quantity}
                 </p>
                 {order.Img && (
-                  <img
+                  <Image
                     src={order.Img}
                     alt={order.product_name}
                     className="img-fluid mt-2 rounded shadow-sm"
                     style={{ maxWidth: "100%", maxHeight: "180px" }}
+                    width={350}
+                    height={180}
                   />
                 )}
                 <button
@@ -137,6 +162,7 @@ export default function OrdersPage() {
           </div>
         )}
       </div>
+
       <style jsx>{`
         .order-item:hover {
           transform: scale(1.05);

@@ -66,7 +66,6 @@ export default function Dashboard() {
     <div className="flex h-screen bg-gray-100">
       <Sidebar />
 
-      {/* Main Content */}
       <div className="flex-1 p-6">
         <h2 className="text-2xl font-bold">Hi, Admin 👋</h2>
         <div className="grid grid-cols-4 gap-4 mt-4">

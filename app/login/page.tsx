@@ -24,7 +24,7 @@ const Login = () => {
     if (error) {
       setError(error.message);
     } else {
-      router.push("/dashboard"); // Muvaffaqiyatli login bo‘lsa yo‘naltiramiz
+      router.push("/dashboard"); 
     }
   };
 

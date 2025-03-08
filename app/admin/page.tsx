@@ -149,7 +149,6 @@ function Categories() {
     setActiveCategory(false);
   };
   
-  // Parolni tekshirish funksiyasi
   const handlePasswordSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (passwordInput === "OzodbekTOP") {
@@ -159,7 +158,6 @@ function Categories() {
     }
   };
 
-  // Agar foydalanuvchi autentifikatsiya o'tmagan bo'lsa, parol formasi ko'rsatiladi
   if (!authenticated) {
     return (
       <div className="container py-4">

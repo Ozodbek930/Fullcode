@@ -7,7 +7,8 @@ import { MdOutlineAccountCircle } from "react-icons/md";
 import { FaFacebookSquare, FaShoppingCart, FaTwitterSquare, FaUser } from "react-icons/fa";
 import { CiInstagram } from "react-icons/ci";
 import { createClient } from "@/supabase/client";
-
+import Skeleton from 'react-loading-skeleton'; 
+import 'react-loading-skeleton/dist/skeleton.css'; 
 interface ProductType {
   id: number;
   name: string;
@@ -18,9 +19,8 @@ interface ProductType {
   Img3?: string;
   images: string[];
 }
-
 export default function ProductDetails() {
-  const supabase =  createClient()
+  const supabase = createClient();
   const params = useParams();
   const router = useRouter();
   const productId = params.id as string;
@@ -29,13 +29,11 @@ export default function ProductDetails() {
   const [quantity, setQuantity] = useState<number>(1);
   const [cartItems, setCartItems] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
-
   useEffect(() => {
     if (productId) {
       fetchProduct(productId);
     }
   }, [productId]);
-
   const fetchProduct = async (id: string) => {
     try {
       setLoading(true);
@@ -45,12 +43,10 @@ export default function ProductDetails() {
         .eq("id", id)
         .single();
       if (error) throw error;
-
       const imagesArray: string[] = [];
       if (data.Img) imagesArray.push(data.Img);
       if (data.Img2) imagesArray.push(data.Img2);
       if (data.Img3) imagesArray.push(data.Img3);
-
       setProduct({
         ...data,
         images: imagesArray,
@@ -62,32 +58,50 @@ export default function ProductDetails() {
       setLoading(false);
     }
   };
-
   const handleImageClick = (imgUrl: string) => {
     setSelectedImage(imgUrl);
   };
-
   const handleQuantityChange = (value: number) => {
     setQuantity(value < 1 ? 1 : value);
   };
-
   const handleBuyNow = () => {
-    alert("Buy Now bosildi! (demo)");
+    alert("Buy Now clicked! (demo)");
   };
-
   const handleAddToCart = () => {
     setCartItems(cartItems + quantity);
-    alert("Mahsulot savatchaga qo'shildi! (demo)");
+    alert("Product added to cart! (demo)");
   };
-
   if (loading) {
-    return <p className="container py-4">Yuklanmoqda...</p>;
+    return (
+      <div className="container py-4">
+        <Skeleton height={40} className="mb-2" />
+        <div className="row">
+          <div className="col-md-2">
+            {Array.from({ length: 3 }, (_, index) => (
+              <Skeleton key={index} height={100} className="mb-3" />
+            ))}
+          </div>
+          <div className="col-md-5">
+            <Skeleton height={500} />
+          </div>
+          <div className="col-md-5">
+            <Skeleton height={30} className="mb-2" />
+            <Skeleton height={20} className="mb-2" />
+            <Skeleton height={20} className="mb-3" />
+            <div className="d-flex align-items-center mb-3">
+              <Skeleton height={40} width={60} className="me-2" />
+              <Skeleton height={40} width={60} className="me-2" />
+            </div>
+            <Skeleton height={40} width={100} className="me-3" />
+            <Skeleton height={40} width={100} />
+          </div>
+        </div>
+      </div>
+    );
   }
-
   if (!product) {
-    return <p className="container py-4">Mahsulot topilmadi.</p>;
+    return <p className="container py-4">Product not found.</p>;
   }
-
   return (
     <div>
       <nav className="bg-white shadow p-4 flex justify-between items-center">
@@ -101,7 +115,7 @@ export default function ProductDetails() {
           className="btn btn-primary" 
           onClick={() => router.push("/")}
         >
-          Bosh sahifaga o'tish
+          Go to Homepage
         </button>
         <div className="flex gap-4">
           <button>
@@ -127,7 +141,6 @@ export default function ProductDetails() {
           </button>
         </div>
       </nav>
-
       <div className="container py-4">
         <div className="row">
           <div className="col-md-2">
@@ -143,7 +156,6 @@ export default function ProductDetails() {
               </div>
             ))}
           </div>
-
           <div className="col-md-5">
             <img
               src={selectedImage}
@@ -152,12 +164,10 @@ export default function ProductDetails() {
               style={{ maxHeight: "500px", objectFit: "cover" }}
             />
           </div>
-
           <div className="col-md-5">
             <h3>{product.name}</h3>
             <p className="text-success">${product.price}</p>
             <p>{product.desc}</p>
-
             <div className="d-flex align-items-center mb-3">
               <button
                 className="btn btn-outline-secondary"
@@ -179,7 +189,6 @@ export default function ProductDetails() {
                 +
               </button>
             </div>
-
             <button className="btn btn-primary me-3" onClick={handleBuyNow}>
               Buy Now
             </button>
@@ -189,10 +198,8 @@ export default function ProductDetails() {
           </div>
         </div>
       </div>
-      {/* ------------------------------------------------------------------------------- */}
       <footer className="bg-gray-100 text-gray-700 text-sm mt-12">
         <div className="container mx-auto p-8">
-          {/* Upper Section */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <div className="text-center">
               <img src="/Group 18.png" alt="Garden Care" className="mx-auto" />

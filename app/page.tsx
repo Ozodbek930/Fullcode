@@ -4,12 +4,10 @@ import { useEffect, useState } from "react";
 import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/supabaseClient";
-import Rodal from "rodal";
 import "rodal/lib/rodal.css";
 import { FaFacebookSquare } from "react-icons/fa";
 import { CiInstagram } from "react-icons/ci";
 import { FaTwitterSquare } from "react-icons/fa";
-import { Form, Button } from "react-bootstrap";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import Home from "./home/page";
 import Sliders from "./Sliders/page";
@@ -28,7 +26,7 @@ interface CategoryType {
 export default function GreenShop() {
   const [cartItems, setCartItems] = useState(0);
   const router = useRouter();
-  const [priceRange, setPriceRange] = useState([39, 1230]);
+
   const [price, setPrice] = useState([39, 1230]);
 
   const [categories, setCategories] = useState<CategoryType[]>([]);
