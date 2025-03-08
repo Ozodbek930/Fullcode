@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { FaSearch, FaShoppingCart, FaUser } from "react-icons/fa";
+import {  FaShoppingCart, FaUser } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/supabaseClient";
 import "rodal/lib/rodal.css";
@@ -90,31 +90,8 @@ export default function GreenShop() {
     setLoading(false);
   };
 
-  const handleBuyClick = (category: CategoryType) => {
-    setSelectedProduct(category);
-    setQuantity(1);
-    setModalVisible(true);
-  };
-  const confirmPurchase = async () => {
-    if (!selectedProduct || quantity < 1) return;
+ 
 
-    const { error } = await supabase.from("Orders").insert([
-      {
-        product_name: selectedProduct.name,
-        price: selectedProduct.price,
-        description: selectedProduct.desc,
-        quantity: quantity,
-        Img: selectedProduct.Img,
-      },
-    ]);
-
-    if (error) {
-      console.error("Buyurtma qo'shishda xatolik:", error.message);
-    } else {
-      alert("Buyurtma muvaffaqiyatli qo'shildi!");
-      setModalVisible(false);
-    }
-  };
 
 
 

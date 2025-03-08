@@ -249,7 +249,7 @@ function Categories() {
                         >
                           <MdEdit />
                         </button>
-git add .
+                        <button
                           onClick={() => handleDelete(category.id)}
                           className="btn btn-danger btn-sm"
                         >
