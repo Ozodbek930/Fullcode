@@ -239,7 +239,7 @@ function Categories() {
                           $
                           {category.price
                             ? category.price.toFixed(2)
-                            : "N/A"}
+                            : "N/AB"}
                         </s>
                       </td>
                       <td>
